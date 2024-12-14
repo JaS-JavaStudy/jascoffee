@@ -10,9 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/orderlist")
+@RequestMapping("/api/orderlist")  // API 기본 경로
 @RequiredArgsConstructor
 public class OrderListController {
 
@@ -32,6 +33,20 @@ public class OrderListController {
         request.setOrderID(orderID);
 
         OrderListResponse response = orderListService.updateOrder(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // 전체 주문 목록 조회
+    @GetMapping
+    public ResponseEntity<List<OrderListResponse>> getAllOrders() {
+        List<OrderListResponse> responseList = orderListService.getAllOrders();
+        return new ResponseEntity<>(responseList, HttpStatus.OK);
+    }
+
+    // 특정 주문 조회
+    @GetMapping("/{orderID}")
+    public ResponseEntity<OrderListResponse> getOrder(@PathVariable BigInteger orderID) {
+        OrderListResponse response = orderListService.getOrder(orderID);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

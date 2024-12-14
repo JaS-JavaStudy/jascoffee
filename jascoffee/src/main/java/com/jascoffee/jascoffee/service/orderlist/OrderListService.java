@@ -8,8 +8,10 @@ import com.jascoffee.jascoffee.repository.orderlist.OrderListRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -59,4 +61,32 @@ public class OrderListService {
             .orderedAt(updatedEntity.getOrderedAt())
             .build();
     }   // 변경 사항 업데이트
+
+    // 특정 주문 조회
+    public OrderListResponse getOrder(BigInteger orderID) {
+        OrderListEntity orderEntity = orderListRepository.findById(orderID)
+                .orElseThrow(() -> new IllegalArgumentException("해당 주문이 존재하지 않습니다. ID: " + orderID));
+
+        return OrderListResponse.builder()
+                .orderID(orderEntity.getOrderID())
+                .userID(orderEntity.getUserID())
+                .totalPrice(orderEntity.getTotalPrice())
+                .isCancel(orderEntity.getIsCancel())
+                .orderedAt(orderEntity.getOrderedAt())
+                .build();
+    }
+
+    // 모든 주문 목록 조회
+    public List<OrderListResponse> getAllOrders() {
+        List<OrderListEntity> orderEntities = orderListRepository.findAll();
+        return orderEntities.stream()
+                .map(order -> OrderListResponse.builder()
+                        .orderID(order.getOrderID())
+                        .userID(order.getUserID())
+                        .totalPrice(order.getTotalPrice())
+                        .isCancel(order.getIsCancel())
+                        .orderedAt(order.getOrderedAt())
+                        .build())
+                .collect(Collectors.toList());
+    }
 }
