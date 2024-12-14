@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ProductListDTO {
-    private Long productId;
-    private String productName;
-    private Integer price;
-    private String category;
+    private Long productId;  // 상품 ID
+    private String productName;  // 상품명
+    private Integer price;  // 상품 가격
+    private String category;  // 상품 카테고리
 }

@@ -17,9 +17,7 @@ import java.util.Iterator;
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
-
     private final JWTUtil jwtUtil;
-
 
     public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil) {
         this.authenticationManager = authenticationManager;
@@ -27,9 +25,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException{
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
-        //클라이언트 요청에서 username, password를 추출
+        // 클라이언트 요청에서 username, password를 추출
         String username = obtainUsername(request);
         String password = obtainPassword(request);
 
@@ -41,26 +39,29 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication){
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) {
 
-        //UserDetails
+        // UserDetails
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 
+        //사용자 이름을 가져옴
         String username = customUserDetails.getUsername();
 
+        // 권한을 가져옴, 여러 권한이 있을 수 있으므로 첫 번째 권한을 사용하거나, 적절한 로직을 추가해야 함
         Collection<? extends GrantedAuthority> authorities = customUserDetails.getAuthorities();
-        Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
-        GrantedAuthority auth = iterator.next();
+        String role = authorities.isEmpty() ? "ROLE_USER" : authorities.iterator().next().getAuthority();  // 기본값을 설정
 
-        String role = auth.getAuthority();
-        String token = jwtUtil.createJwt(username,role,60*60*10L);
+        // JWT 생성
+        String token = jwtUtil.createJwt(username, role, 60 * 60 * 10L);
 
+        // 응답에 JWT 토큰 추가
         response.addHeader("Authorization", "Bearer " + token);
-
     }
 
     @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed){
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
+        // 인증 실패 시 상태 코드 설정
         response.setStatus(401);
     }
 }
+
