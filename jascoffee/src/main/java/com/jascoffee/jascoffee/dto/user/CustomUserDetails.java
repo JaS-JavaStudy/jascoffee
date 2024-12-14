@@ -4,8 +4,8 @@ import com.jascoffee.jascoffee.entity.user.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 public class CustomUserDetails implements UserDetails {
 
@@ -17,28 +17,18 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> collection = new ArrayList<>();
-
-        collection.add(new GrantedAuthority() {
-            @Override
-            public String getAuthority() {
-                return userEntity.getRole();
-            }
-        });
-
-        return collection;
+        // 권한이 필요 없다면 빈 리스트를 반환
+        return Collections.emptyList();
     }
 
     @Override
     public String getPassword() {
-
         return userEntity.getPassword();
     }
 
     @Override
     public String getUsername() {
-
-        return userEntity.getUsername();
+        return userEntity.getAccount(); // account를 username으로 사용
     }
 
     @Override
@@ -48,7 +38,6 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-
         return true;
     }
 
