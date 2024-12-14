@@ -1,0 +1,65 @@
+HELP.md
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### 환경 설정 파일 ###
+src/main/resources/application*.yml
+src/main/resources/application*.yaml
+src/main/resources/application*.properties
+src/test/resources/application*.yml
+src/test/resources/application*.yaml
+src/test/resources/application*.properties
+
+### 로그 파일 ###
+*.log
+logs/
+log/
+
+### 캐시 및 임시 파일 ###
+*.swp
+*.swo
+*.tmp
+
+### SSL 키 및 인증서 ###
+*.jks
+*.p12
+*.pem
+*.crt
+*.key
+
+### 환경 변수 파일 ###
+.env
