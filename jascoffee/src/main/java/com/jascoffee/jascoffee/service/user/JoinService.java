@@ -42,6 +42,12 @@ public class JoinService {
             throw new IllegalArgumentException("Account already exists");
         }
 
+        // 이미 존재하는 mmId 체크
+        Boolean isExistMm = userRepository.existsByMmid(mmid);
+        if (isExistMm) {
+            throw new IllegalArgumentException("MMID already exists");
+        }
+
         // 사용자 엔티티 생성 및 정보 설정
         UserEntity data = new UserEntity();
         data.setAccount(account);

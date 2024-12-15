@@ -1,5 +1,6 @@
 package com.jascoffee.jascoffee.jwt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jascoffee.jascoffee.dto.user.CustomUserDetails;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,7 +11,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import com.jascoffee.jascoffee.dto.user.JoinDTO;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -18,18 +21,40 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final JWTUtil jwtUtil;
+    // JSON으로 받기 위한
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
     }
 
+    // account request를 username으로 변경해야함
+    @Override
+    protected String obtainUsername(HttpServletRequest request) {
+        return request.getParameter("account");
+    }
+
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
-        // 클라이언트 요청에서 username, password를 추출
-        String username = obtainUsername(request);
-        String password = obtainPassword(request);
+        // 1.JSON 버전 (요청 본문에서 JSON 데이터를 읽어오기)
+        String username = null;
+        String password = null;
+
+        try {
+            // JSON 데이터 파싱
+            JoinDTO joinDTO = objectMapper.readValue(request.getInputStream(), JoinDTO.class);
+            username = joinDTO.getAccount();  // JoinDTO에서 username 추출
+            password = joinDTO.getPassword();  // JoinDTO에서 password 추출
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new AuthenticationException("Failed to parse JSON request") {};
+        }
+
+        // 2. form-data버전 (클라이언트 요청에서 username, password를 추출)
+//        String username = obtainUsername(request);
+//        String password = obtainPassword(request);
 
         // 스프링 시큐리티에서 username과 password를 검증하기 위해 token에 담음
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
