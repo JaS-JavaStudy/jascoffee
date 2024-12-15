@@ -68,16 +68,15 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         // UserDetails
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
-
+        System.out.println(customUserDetails.getIsStaff());
         //사용자 이름을 가져옴
-        String username = customUserDetails.getUsername();
-
+        String account = customUserDetails.getAccount();
         // 권한을 가져옴, 여러 권한이 있을 수 있으므로 첫 번째 권한을 사용하거나, 적절한 로직을 추가해야 함
-        Collection<? extends GrantedAuthority> authorities = customUserDetails.getAuthorities();
-        String role = authorities.isEmpty() ? "ROLE_USER" : authorities.iterator().next().getAuthority();  // 기본값을 설정
+//        Collection<? extends GrantedAuthority> authorities = customUserDetails.getAuthorities();
+        boolean isStaff = customUserDetails.getIsStaff();  // 기본값을 설정
 
         // JWT 생성
-        String token = jwtUtil.createJwt(username, role, 60 * 60 * 10L);
+        String token = jwtUtil.createJwt(account, isStaff, 60 * 60 * 10L);
 
         // 응답에 JWT 토큰 추가
         response.addHeader("Authorization", "Bearer " + token);

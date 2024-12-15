@@ -21,6 +21,11 @@ public class CustomUserDetails implements UserDetails {
         return Collections.emptyList();
     }
 
+    // isStaff와 account 등 받기 위해
+    public String getAccount() { return userEntity.getAccount();}
+
+    public Boolean getIsStaff() { return userEntity.getIsStaff();}
+
     @Override
     public String getPassword() {
         return userEntity.getPassword();
