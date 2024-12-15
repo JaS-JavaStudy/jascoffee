@@ -27,22 +27,22 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     }
 
     // account request를 username으로 변경해야함
-    @Override
-    protected String obtainUsername(HttpServletRequest request) {
-        return request.getParameter("account");
-    }
+//    @Override
+//    protected String obtainUsername(HttpServletRequest request) {
+//        return request.getParameter("account");
+//    }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
         // 1.JSON 버전 (요청 본문에서 JSON 데이터를 읽어오기)
-        String username = null;
+        String account = null;
         String password = null;
 
         try {
             // JSON 데이터 파싱
             JoinDTO joinDTO = objectMapper.readValue(request.getInputStream(), JoinDTO.class);
-            username = joinDTO.getAccount();  // JoinDTO에서 username 추출
+            account = joinDTO.getAccount();  // JoinDTO에서 username 추출
             password = joinDTO.getPassword();  // JoinDTO에서 password 추출
         } catch (IOException e) {
             e.printStackTrace();
@@ -54,7 +54,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 //        String password = obtainPassword(request);
 
         // 스프링 시큐리티에서 username과 password를 검증하기 위해 token에 담음
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(account, password, null);
 
         // 담은 토큰을 AuthenticationManager로 전달
         return authenticationManager.authenticate(authToken);
@@ -65,7 +65,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         // UserDetails
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
-        System.out.println(customUserDetails.getIsStaff());
+
         //사용자 이름을 가져옴
         String account = customUserDetails.getAccount();
         // 권한을 가져옴, 여러 권한이 있을 수 있으므로 첫 번째 권한을 사용하거나, 적절한 로직을 추가해야 함
@@ -73,7 +73,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         boolean isStaff = customUserDetails.getIsStaff();  // 기본값을 설정
 
         // JWT 생성
-        String token = jwtUtil.createJwt(account, isStaff, 60 * 60 * 10L);
+        String token = jwtUtil.createJwt(account, isStaff, 60 * 1000 * 10L);
 
         // 응답에 JWT 토큰 추가
         response.addHeader("Authorization", "Bearer " + token);

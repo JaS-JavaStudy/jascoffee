@@ -27,15 +27,6 @@ public class JWTUtil {
                 .get("account", String.class);
     }
 
-    // 토큰에서 role을 가져오는 메서드
-    public String getRole(String token) {
-        return Jwts.parser()
-                .verifyWith(secretKey)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .get("role", String.class);
-    }
 
     // 토큰의 만료 여부 확인
     public Boolean isExpired(String token) {

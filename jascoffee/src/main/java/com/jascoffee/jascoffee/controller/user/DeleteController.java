@@ -24,12 +24,11 @@ public class DeleteController {
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteUser(@RequestHeader("Authorization") String token) {
         // Bearer prefix 제거
-        System.out.println(token);
         String jwtToken = token.replace("Bearer ", "");
-        System.out.println(jwtToken);
+
         // JWT에서 account 추출
         String account = jwtUtil.getAccount(jwtToken);
-        System.out.println(account);
+
         // 탈퇴 처리
         try {
             userService.deleteUserByAccount(account);
