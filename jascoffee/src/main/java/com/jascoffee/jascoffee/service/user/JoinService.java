@@ -5,6 +5,7 @@ import com.jascoffee.jascoffee.entity.user.UserEntity;
 import com.jascoffee.jascoffee.repository.user.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class JoinService {
@@ -25,11 +26,6 @@ public class JoinService {
         String mmid = joinDTO.getMmid();
         String fund = joinDTO.getFund();
         Boolean isStaff = joinDTO.getIsStaff();
-
-        // 디버깅 코드 추가
-        System.out.println("Password: " + password); // 비밀번호 값 출력
-        System.out.println("Account: " + account);   // 계정 값 출력
-        System.out.println("Name: " + name);         // 이름 값 출력
 
         // 비밀번호가 null이거나 빈 문자열인 경우 예외 처리
         if (joinDTO.isPasswordEmpty()) {
@@ -59,5 +55,11 @@ public class JoinService {
 
         // 데이터베이스에 저장
         userRepository.save(data);
+    }
+
+    @Transactional
+    public void deleteUserByAccount(String account) {
+
+        userRepository.deleteByAccount(account);
     }
 }

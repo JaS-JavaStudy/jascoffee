@@ -44,12 +44,10 @@ public class JWTFilter extends OncePerRequestFilter {
 
         // 토큰에서 account와 role 획득
         String account = jwtUtil.getAccount(token);  // getUsername 메서드는 account 값을 반환해야 함
-        String role = jwtUtil.getRole(token);
 
         UserEntity userEntity = new UserEntity();
         userEntity.setAccount(account);  // account 필드로 설정
         userEntity.setPassword("temppassword");
-        userEntity.setIsStaff(role.equals("ROLE_ADMIN")); // role에 맞게 isStaff 필드 설정
 
         // userDetail에 회원 정보 객체 담기
         CustomUserDetails customUserDetails = new CustomUserDetails(userEntity);
