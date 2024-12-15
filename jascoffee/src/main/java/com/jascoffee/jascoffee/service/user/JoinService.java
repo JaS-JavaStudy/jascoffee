@@ -60,4 +60,8 @@ public class JoinService {
         // 데이터베이스에 저장
         userRepository.save(data);
     }
+
+    public void deleteUserByAccount(String account) {
+        userRepository.deleteUserByAccount(account);
+    }
 }
