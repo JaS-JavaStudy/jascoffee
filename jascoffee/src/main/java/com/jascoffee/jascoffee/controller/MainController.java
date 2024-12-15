@@ -17,20 +17,6 @@ public class MainController {
     @GetMapping("/")
     public String mainP() {
 
-        // 현재 인증된 사용자 정보 가져오기
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        System.out.println(principal);
-        // principal 이 UserDetails 타입으로 캐스팅 가능한지 확인
-        if (principal instanceof UserDetails) {
-            CustomUserDetails userDetails = (CustomUserDetails) principal;
-            System.out.println(userDetails);
-            // account 와 isStaff 가져오기
-            String account = userDetails.getAccount();
-            boolean isStaff = userDetails.getIsStaff();
-            System.out.println(account);
-
-            return "Main Controller : Account = " + account + ", Is Staff = " + isStaff;
-        }
-        return "User is not authenticated";
+        return "This is Main";
     }
 }
