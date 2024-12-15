@@ -49,10 +49,10 @@ public class JWTUtil {
     }
 
     // JWT 생성 메서드
-    public String createJwt(String account, String role, Long expiredMs) {
+    public String createJwt(String account, boolean isStaff, Long expiredMs) {
         return Jwts.builder()
                 .claim("account", account) // account로 필드명 변경
-                .claim("role", role)
+                .claim("isStaff", isStaff)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiredMs))
                 .signWith(secretKey)
