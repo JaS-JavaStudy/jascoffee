@@ -110,4 +110,51 @@ public class ProductService {
                 .options(options)
                 .build();
     }
+
+    // 상품 삭제
+    public void deleteProduct(Long productId) {
+        // 상품 조회
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("상품을 찾을 수 없습니다."));
+
+        // 상품 삭제 (Cascade 옵션에 따라 옵션도 자동으로 삭제됨)
+        productRepository.delete(product);
+    }
+
+    // 상품 수정
+    public ProductDetailDTO updateProduct(Long productId, ProductUpdateDTO productUpdateDTO) {
+        // 1. 상품 조회
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("상품을 찾을 수 없습니다."));
+
+        // 2. 상품 정보 업데이트
+        product.setProductName(productUpdateDTO.getProductName());
+        product.setPrice(productUpdateDTO.getPrice());
+        product.setCategory(productUpdateDTO.getCategory());
+
+        // 3. 옵션 업데이트
+        updateProductOptions(product, productUpdateDTO.getOptions());
+
+        // 4. 저장 및 반환
+        Product updatedProduct = productRepository.save(product);
+        return convertToDetailDTO(updatedProduct);
+    }
+
+    // 옵션 업데이트 (기존 옵션 삭제 후 새 옵션 추가)
+    private void updateProductOptions(Product product, List<ProductOptionCreateDTO> newOptions) {
+        // 기존 옵션 삭제
+        product.getOptions().clear();
+
+        // 새로운 옵션 추가
+        if (newOptions != null && !newOptions.isEmpty()) {
+            newOptions.forEach(optionDTO -> {
+                ProductOption newOption = ProductOption.builder()
+                        .optionName(optionDTO.getOptionName())
+                        .optionPrice(optionDTO.getOptionPrice())
+                        .build();
+                product.addOption(newOption); // 연관 관계 설정
+            });
+        }
+    }
+
 }

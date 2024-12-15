@@ -39,4 +39,20 @@ public class ProductController {
         ProductDetailDTO product = productService.getProductDetail(productId);
         return ResponseEntity.ok(product);
     }
+
+    // 상품 삭제
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable("productId") Long productId) {
+        productService.deleteProduct(productId);
+        return ResponseEntity.noContent().build();
+    }
+
+    // 상품 수정
+    @PutMapping("/{productId}")
+    public ResponseEntity<ProductDetailDTO> updateProduct(@PathVariable("productId") Long productId,
+                                                          @RequestBody ProductUpdateDTO productUpdateDTO) {
+        ProductDetailDTO updatedProduct = productService.updateProduct(productId, productUpdateDTO);
+        return ResponseEntity.ok(updatedProduct);
+    }
+
 }
