@@ -16,10 +16,10 @@ import java.time.LocalDateTime;
 public class OrderListEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private BigInteger orderID;
+    private Long orderID;
 
     @Column(nullable = false) // NOT NULL 제약 조건
-    private BigInteger userID;
+    private Long userID;
 
     @Column
     private Integer totalPrice;

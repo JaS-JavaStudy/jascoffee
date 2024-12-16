@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 import java.math.BigInteger;
 
 @Repository
-public interface OrderListRepository extends JpaRepository<OrderListEntity, BigInteger> {
+public interface OrderListRepository extends JpaRepository<OrderListEntity, Long> {
 }

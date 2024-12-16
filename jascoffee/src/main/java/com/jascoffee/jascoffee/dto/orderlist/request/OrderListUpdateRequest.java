@@ -8,7 +8,7 @@ import java.math.BigInteger;
 @Data
 @NoArgsConstructor
 public class OrderListUpdateRequest {
-    private BigInteger orderID;
+    private Long orderID;
     private Integer totalPrice;
     private Boolean isCancel;
 }

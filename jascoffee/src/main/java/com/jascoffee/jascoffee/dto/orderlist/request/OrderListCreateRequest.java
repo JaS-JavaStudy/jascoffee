@@ -9,7 +9,7 @@ import java.math.BigInteger;
 @NoArgsConstructor
 public class OrderListCreateRequest {
     // orderID는 서버에서 자동 생성
-    private BigInteger userID;
+    private Long userID;
     private Integer totalPrice;
     private Boolean isCancel;
 
