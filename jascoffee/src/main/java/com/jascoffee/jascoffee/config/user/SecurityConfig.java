@@ -1,9 +1,11 @@
 package com.jascoffee.jascoffee.config.user;
 
+import com.jascoffee.jascoffee.jwt.CustomLogoutFilter;
 import com.jascoffee.jascoffee.jwt.JWTFilter;
 import com.jascoffee.jascoffee.jwt.LoginFilter;
 import com.jascoffee.jascoffee.jwt.JWTUtil;
 
+import com.jascoffee.jascoffee.repository.user.RefreshRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +17,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -46,7 +49,7 @@ public class SecurityConfig{
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain filterChain(HttpSecurity http, RefreshRepository refreshRepository) throws Exception{
 
         http
                 .csrf((auth) -> auth.disable());
@@ -59,14 +62,19 @@ public class SecurityConfig{
 
         http
                 .authorizeHttpRequests((auth)-> auth
-                        .requestMatchers("/login","/","join").permitAll()
+                        .requestMatchers("/login","/","/join").permitAll()
+                        .requestMatchers("/reissue").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated());
         http
                 .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
 
         http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration),jwtUtil), UsernamePasswordAuthenticationFilter.class);
+                .addFilterAt(
+                        new LoginFilter(authenticationManager(authenticationConfiguration),jwtUtil, refreshRepository), UsernamePasswordAuthenticationFilter.class);
+
+        http
+                .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository), LogoutFilter.class);
 
         http
                 .sessionManagement((session) -> session
@@ -95,4 +103,8 @@ public class SecurityConfig{
 
         return http.build();
     }
+    //수정전 re/eyJhbGciOiJIUzI1NiJ9.eyJjYXRlZ29yeSI6InJlZnJlc2giLCJhY2NvdW50IjoidGVzdCIsImlzU3RhZmYiOmZhbHNlLCJpYXQiOjE3MzQzMzMxNTcsImV4cCI6MTczNDQxOTE1N30.9WW2090kSv8HGHSY_7QjHq25lsy7gvyqW0_o-mGaXqA
+    //수정 전 ac/eyJhbGciOiJIUzI1NiJ9.eyJjYXRlZ29yeSI6ImFjY2VzcyIsImFjY291bnQiOiJ0ZXN0IiwiaXNTdGFmZiI6ZmFsc2UsImlhdCI6MTczNDMzMzE1NywiZXhwIjoxNzM0MzM5MTU3fQ.LWTKy9G0OTAiahQX5_Gd2Fi6iv4t-_2bxBp27GvqXR4
+
+    //수정후 re/eyJhbGciOiJIUzI1NiJ9.eyJjYXRlZ29yeSI6InJlZnJlc2giLCJhY2NvdW50IjoidGVzdCIsImlzU3RhZmYiOmZhbHNlLCJpYXQiOjE3MzQzMzMxNTcsImV4cCI6MTczNDQxOTE1N30.9WW2090kSv8HGHSY_7QjHq25lsy7gvyqW0_o-mGaXqA
 }
