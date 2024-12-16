@@ -29,7 +29,7 @@ public class OrderListController {
 
     // 주문 수정
     @PutMapping("/{orderID}")
-    public ResponseEntity<OrderListResponse> updateOrder(@PathVariable BigInteger orderID, @RequestBody OrderListUpdateRequest request) {
+    public ResponseEntity<OrderListResponse> updateOrder(@PathVariable("orderID") Long orderID, @RequestBody OrderListUpdateRequest request) {
         request.setOrderID(orderID);
 
         OrderListResponse response = orderListService.updateOrder(request);
@@ -45,7 +45,7 @@ public class OrderListController {
 
     // 특정 주문 조회
     @GetMapping("/{orderID}")
-    public ResponseEntity<OrderListResponse> getOrder(@PathVariable BigInteger orderID) {
+    public ResponseEntity<OrderListResponse> getOrder(@PathVariable("orderID") Long orderID) {
         OrderListResponse response = orderListService.getOrder(orderID);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

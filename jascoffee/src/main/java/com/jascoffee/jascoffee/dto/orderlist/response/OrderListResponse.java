@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 public class OrderListResponse {
-    private BigInteger orderID;
-    private BigInteger userID;
+    private Long orderID;
+    private Long userID;
     private Integer totalPrice;
     private Boolean isCancel;
     private LocalDateTime orderedAt;
