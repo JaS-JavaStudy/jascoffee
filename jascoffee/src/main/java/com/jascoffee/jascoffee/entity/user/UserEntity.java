@@ -1,35 +1,25 @@
 package com.jascoffee.jascoffee.entity.user;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
-@Table(name = "users") // 테이블 이름 지정
+
 public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "userID") // 컬럼 이름 지정
-    private Long userID;
+    private int id;
 
-    @Column(name = "account")
-    private String account;
+    private String username;
 
-    @Column(name = "Password")
     private String password;
 
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "MMID")
-    private String mmid;
-
-    @Column(name = "fund")
-    private String fund;
-
-    @Column(name = "isStaff")
-    private Boolean isStaff;
+    private String role;
 }
