@@ -47,23 +47,23 @@ public class OrderListService {
         OrderListEntity existingOrder = orderListRepository.findById(request.getOrderID())
                 .orElseThrow(() -> new IllegalArgumentException("해당 주문이 존재하지 않습니다. ID: " + request.getOrderID()));
 
-    existingOrder.setTotalPrice(request.getTotalPrice());
-    existingOrder.setIsCancel(request.getIsCancel());
-    existingOrder.setOrderedAt(LocalDateTime.now());
+        existingOrder.setTotalPrice(request.getTotalPrice());
+        if(request.getIsCancel() != null) existingOrder.setIsCancel(request.getIsCancel());
+        existingOrder.setOrderedAt(LocalDateTime.now());
 
-    OrderListEntity updatedEntity = orderListRepository.save(existingOrder);
+        OrderListEntity updatedEntity = orderListRepository.save(existingOrder);
 
-    return OrderListResponse.builder()
-            .orderID(updatedEntity.getOrderID())
-            .userID(updatedEntity.getUserID())
-            .totalPrice(updatedEntity.getTotalPrice())
-            .isCancel(updatedEntity.getIsCancel())
-            .orderedAt(updatedEntity.getOrderedAt())
-            .build();
+        return OrderListResponse.builder()
+                .orderID(updatedEntity.getOrderID())
+                .userID(updatedEntity.getUserID())
+                .totalPrice(updatedEntity.getTotalPrice())
+                .isCancel(updatedEntity.getIsCancel())
+                .orderedAt(updatedEntity.getOrderedAt())
+                .build();
     }   // 변경 사항 업데이트
 
     // 특정 주문 조회
-    public OrderListResponse getOrder(BigInteger orderID) {
+    public OrderListResponse getOrder(Long orderID) {
         OrderListEntity orderEntity = orderListRepository.findById(orderID)
                 .orElseThrow(() -> new IllegalArgumentException("해당 주문이 존재하지 않습니다. ID: " + orderID));
 
