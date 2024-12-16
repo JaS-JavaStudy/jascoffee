@@ -10,4 +10,9 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     // account를 받아 DB 테이블에서 회원을 조회하는 메소드
     UserEntity findByAccount(String account);
+
+    //mmId를 받아 DB 테이블에서 존재 여부 확인
+    Boolean existsByMmid(String mmid);
+
+    void deleteByAccount(String account);
 }

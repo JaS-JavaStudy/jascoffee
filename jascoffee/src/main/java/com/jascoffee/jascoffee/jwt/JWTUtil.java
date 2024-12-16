@@ -27,35 +27,49 @@ public class JWTUtil {
                 .get("account", String.class);
     }
 
-    // 토큰에서 role을 가져오는 메서드
-    public String getRole(String token) {
+    public String getIsStaff(String token) {
         return Jwts.parser()
                 .verifyWith(secretKey)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload()
-                .get("role", String.class);
+                .get("isStaff", String.class);
     }
+
 
     // 토큰의 만료 여부 확인
     public Boolean isExpired(String token) {
-        return Jwts.parser()
-                .verifyWith(secretKey)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .getExpiration()
-                .before(new Date());
+        try {
+            Date expiration = Jwts.parser()
+                    .setSigningKey(secretKey)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .getExpiration();
+
+            return expiration.before(new Date());
+        } catch (Exception e) {
+            // 파싱 중 에러 발생 시 만료된 것으로 간주
+            return true;
+        }
+    }
+
+    public String getCategory(String token) {
+
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("category", String.class);
     }
 
     // JWT 생성 메서드
-    public String createJwt(String account, String role, Long expiredMs) {
+    public String createJwt(String category, String account, String isStaff,Long expiredMs) {
         return Jwts.builder()
+                .claim("category", category)
                 .claim("account", account) // account로 필드명 변경
-                .claim("role", role)
+                .claim("isStaff", isStaff)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiredMs))
                 .signWith(secretKey)
                 .compact();
     }
+
+
 }

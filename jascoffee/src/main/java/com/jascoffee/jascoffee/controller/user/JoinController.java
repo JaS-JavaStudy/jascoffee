@@ -15,11 +15,18 @@ public class JoinController {
         this.joinService = joinService;
     }
 
+    // @RequestBody를 사용하여 JSON 형식으로 데이터를 받을 때
     @PostMapping("/join")
-    public String joinProcess(@RequestBody JoinDTO joinDTO) {  // @RequestBody 추가
-
+    public String joinProcess(@RequestBody JoinDTO joinDTO) {
         joinService.joinProcess(joinDTO);
-
         return "ok";
     }
+
+    // @ModelAttribute를 사용하여 form-data를 받을 때
+//    @PostMapping("/join/form")
+//    public String joinProcessForm(JoinDTO joinDTO) {
+//        joinService.joinProcess(joinDTO);
+//        return "ok";
+//    }
+
 }
