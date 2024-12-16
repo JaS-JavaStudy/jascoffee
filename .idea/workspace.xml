@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bfcbd047-1da5-4400-9f92-0891442733ea" name="Changes" comment="" />
+    <list default="true" id="bfcbd047-1da5-4400-9f92-0891442733ea" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/jascoffee/src/main/java/com/jascoffee/jascoffee/entity/orderlist/OrderListEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/jascoffee/src/main/java/com/jascoffee/jascoffee/entity/orderlist/OrderListEntity.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,9 +15,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 4
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
   <component name="ProjectId" id="2qCJVVAnw8GubGhaewZCZO4NiZo" />
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
@@ -30,6 +32,14 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23339.11" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23339.11" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -39,6 +49,7 @@
       <option name="presentableId" value="Default" />
       <updated>1734160649128</updated>
       <workItem from="1734160651019" duration="74000" />
+      <workItem from="1734187516239" duration="31000" />
     </task>
     <servers />
   </component>
