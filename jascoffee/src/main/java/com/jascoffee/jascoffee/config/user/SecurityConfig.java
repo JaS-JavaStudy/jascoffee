@@ -62,9 +62,10 @@ public class SecurityConfig{
 
         http
                 .authorizeHttpRequests((auth)-> auth
-                        .requestMatchers("/login","/","/join").permitAll()
+                        .requestMatchers("/login","/","/join","/products","/orderdetail","api/orderlist","orderdetailAll").permitAll()
                         .requestMatchers("/reissue").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
+                        .requestMatchers("/users/change-password").authenticated()
                         .anyRequest().authenticated());
         http
                 .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
