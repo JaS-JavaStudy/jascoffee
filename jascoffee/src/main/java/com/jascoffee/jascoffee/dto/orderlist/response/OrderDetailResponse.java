@@ -32,5 +32,7 @@ public class OrderDetailResponse {
         this.isWhip = detail.getIsWhip();
         this.price = detail.getPrice();
     }
-//    public OrderDetailResponse(Long orderDetailID, Long orderID)
+    public OrderDetailResponse(Long orderDetailID){
+        this.orderDetailID = orderDetailID;
+    }
 }

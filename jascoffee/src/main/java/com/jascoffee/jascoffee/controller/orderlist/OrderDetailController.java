@@ -26,10 +26,10 @@ public class OrderDetailController {
         return orderDetailService.getOrderDetails();
     }
 
-//    @GetMapping("/orderdetail")
-//    public List<OrderDetailResponse> getOrderDetail(){
-//        return orderDetailService.getOrderDetail();
-//    }
+    @GetMapping("/orderdetail")
+    public List<OrderDetailResponse> getOrderDetail(@RequestParam Long id){
+        return orderDetailService.getOrderDetailByorderDetailID(id);
+    }
 
 
 //    @DeleteMapping("/orderdetails/{detailID}")

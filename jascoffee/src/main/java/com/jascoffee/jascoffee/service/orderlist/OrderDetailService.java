@@ -59,14 +59,12 @@ public class OrderDetailService {
                 .map(OrderDetailResponse::new)
                 .collect(Collectors.toList());
     }
-//    public List<OrderDetailResponse> getOrderDetail() {
-//        List<OrderDetailEntity> orderdetails = orderDetailRepository.findAll();
-//        return orderdetails.stream()
-//                .map(orderdetail -> new OrderDetailResponse(
-//                        orderdetail.getOrderDetailID(),
-//                        orderdetail.getIsIce()))
-//                .collect(Collectors.toList());
-//    }
+    public List<OrderDetailResponse> getOrderDetailByorderDetailID(Long orderDetailID) {
+        List<OrderDetailEntity> orderdetails = orderDetailRepository.findByOrderDetailID(orderDetailID);
+        return orderdetails.stream()
+                .map(OrderDetailResponse::new)
+                .collect(Collectors.toList());
+    }
 
 
     public void deleteOrderDetail(Long detailID) {
