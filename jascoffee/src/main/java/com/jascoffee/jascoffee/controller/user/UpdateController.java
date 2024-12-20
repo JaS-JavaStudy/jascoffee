@@ -1,5 +1,6 @@
 package com.jascoffee.jascoffee.controller.user;
 
+import com.jascoffee.jascoffee.dto.user.PasswordUpdateDTO;
 import com.jascoffee.jascoffee.dto.user.UserUpdateDTO;
 import com.jascoffee.jascoffee.service.user.UserService;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,13 @@ public class UpdateController {
     @PutMapping ("/update")
     public ResponseEntity<?> update(@RequestBody UserUpdateDTO request) {
         userService.updateUser(request);
-        System.out.println("회원정보 수정 디버깅 용");
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body("회원 정보가 수정되었습니다.");
+    }
+
+    @PutMapping("/password/update")
+    public ResponseEntity<?> updatePassword(@RequestBody PasswordUpdateDTO request) {
+        userService.updatePassword(request);
+        System.out.println("이거 print되면 수정 된거");
+        return ResponseEntity.ok().body("비밀번호 변경되었습니다.");
     }
 }
