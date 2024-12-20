@@ -62,6 +62,11 @@ public class UserService {
         if(request.getFund() != null) {
             user.setFund(request.getFund());
         }
+
+        if(request.getName() != null) {
+            user.setName(request.getName());
+        }
+
         System.out.println("수정 후 id" + user + "수정 후 mmid"+ user.getMmid());
         userRepository.save(user);
     }
