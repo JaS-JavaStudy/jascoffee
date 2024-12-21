@@ -33,13 +33,13 @@ public class JoinService {
         }
 
         // 이미 존재하는 계정 체크
-        Boolean isExist = userRepository.existsByAccount(account);
+        boolean isExist = userRepository.existsByAccount(account);
         if (isExist) {
             throw new IllegalArgumentException("Account already exists");
         }
 
         // 이미 존재하는 mmId 체크
-        Boolean isExistMm = userRepository.existsByMmid(mmid);
+        boolean isExistMm = userRepository.existsByMmid(mmid);
         if (isExistMm) {
             throw new IllegalArgumentException("MMID already exists");
         }

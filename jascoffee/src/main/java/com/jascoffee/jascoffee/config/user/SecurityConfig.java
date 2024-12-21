@@ -62,11 +62,14 @@ public class SecurityConfig{
 
         http
                 .authorizeHttpRequests((auth)-> auth
-                        .requestMatchers("/login","/","/join","/products","/orderdetail","api/orderlist","orderdetailAll").permitAll()
-                        .requestMatchers("/reissue").permitAll()
-                        .requestMatchers("/admin").hasRole("ADMIN")
-                        .requestMatchers("/users/change-password").authenticated()
+                        .requestMatchers("/**").permitAll()  // 이 경로들은 모두 접근 가능
+                        .requestMatchers("/admin").hasRole("ADMIN")  // admin 경로는 ADMIN 역할을 가진 사용자만
                         .anyRequest().authenticated());
+
+        http
+                .sessionManagement((session) -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
         http
                 .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
 
@@ -77,9 +80,7 @@ public class SecurityConfig{
         http
                 .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository), LogoutFilter.class);
 
-        http
-                .sessionManagement((session) -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
 
         // CORS 부분
         http
