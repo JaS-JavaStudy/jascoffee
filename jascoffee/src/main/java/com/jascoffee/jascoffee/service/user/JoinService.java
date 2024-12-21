@@ -1,6 +1,7 @@
 package com.jascoffee.jascoffee.service.user;
 
 import com.jascoffee.jascoffee.dto.user.JoinDTO;
+import com.jascoffee.jascoffee.dto.user.UserDTO;
 import com.jascoffee.jascoffee.entity.user.UserEntity;
 import com.jascoffee.jascoffee.repository.user.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -61,5 +62,12 @@ public class JoinService {
     public void deleteUserByAccount(String account) {
 
         userRepository.deleteByAccount(account);
+    }
+
+    public UserDTO getUserByAccount(String account){
+        UserEntity user = userRepository.findByAccount(account)
+                .orElseThrow(() -> new RuntimeException("없는 회원 입니다."));
+
+        return new UserDTO(user.getAccount(),user.getName(),user.getMmid(),user.getFund());
     }
 }

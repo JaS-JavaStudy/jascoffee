@@ -2,6 +2,7 @@ package com.jascoffee.jascoffee.service.user;
 
 import com.jascoffee.jascoffee.dto.user.CustomUserDetails;
 import com.jascoffee.jascoffee.dto.user.PasswordUpdateDTO;
+import com.jascoffee.jascoffee.dto.user.UserDTO;
 import com.jascoffee.jascoffee.dto.user.UserUpdateDTO;
 import com.jascoffee.jascoffee.entity.user.UserEntity;
 import com.jascoffee.jascoffee.repository.user.UserRepository;
@@ -104,6 +105,8 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
     }
+
+
 
 
 }
