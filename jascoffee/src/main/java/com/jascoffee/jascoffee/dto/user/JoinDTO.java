@@ -19,6 +19,7 @@ public class JoinDTO {
 
     private Boolean isStaff;   // 직원 여부
 
+
     // 비밀번호 검증 추가
     public boolean isPasswordEmpty() {
         return password == null || password.trim().isEmpty();
