@@ -110,6 +110,11 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public UserEntity findByAccount(String account) {
+        return userRepository.findByAccount(account)
+                .orElseThrow(() -> new UsernameNotFoundException("Account를 가진 사용자를 찾을 수 없습니다: " + account));
+    }
+
 
 
 

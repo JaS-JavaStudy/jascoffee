@@ -25,7 +25,7 @@ public class OrderListService {
         OrderListEntity orderListEntity = OrderListEntity.builder()
                 .userID(request.getUserID())
                 .totalPrice(request.getTotalPrice())
-                .isCancel(false)
+                .isCancel(request.getIsCancel())
                 .orderedAt(LocalDateTime.now())
                 .build();
 
@@ -79,6 +79,23 @@ public class OrderListService {
     // 모든 주문 목록 조회
     public List<OrderListResponse> getAllOrders() {
         List<OrderListEntity> orderEntities = orderListRepository.findAll();
+        return orderEntities.stream()
+                .map(order -> OrderListResponse.builder()
+                        .orderID(order.getOrderID())
+                        .userID(order.getUserID())
+                        .totalPrice(order.getTotalPrice())
+                        .isCancel(order.getIsCancel())
+                        .orderedAt(order.getOrderedAt())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    // 특정 사용자의 모든 주문 조회
+    public List<OrderListResponse> getOrdersByUserId(Long userId) {
+        // Repository를 이용해 userID로 주문 목록 조회
+        List<OrderListEntity> orderEntities = orderListRepository.findByUserID(userId);
+
+        // Entity → Response DTO 변환
         return orderEntities.stream()
                 .map(order -> OrderListResponse.builder()
                         .orderID(order.getOrderID())
