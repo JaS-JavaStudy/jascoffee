@@ -15,7 +15,9 @@ public class JoinDTO {
 
     private String mmid;       // 사용자 고유 ID
 
-    private String fund;       // 자금 정보
+    private String bank;       // 은행 정보
+
+    private String fund;       // 계좌 정보
 
     private Boolean isStaff;   // 직원 여부
 

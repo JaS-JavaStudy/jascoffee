@@ -25,6 +25,7 @@ public class JoinService {
         String password = joinDTO.getPassword();
         String name = joinDTO.getName();
         String mmid = joinDTO.getMmid();
+        String bank = joinDTO.getBank();
         String fund = joinDTO.getFund();
         Boolean isStaff = joinDTO.getIsStaff();
 
@@ -51,6 +52,7 @@ public class JoinService {
         data.setPassword(bCryptPasswordEncoder.encode(password)); // 비밀번호 암호화
         data.setName(name);
         data.setMmid(mmid);
+        data.setBank(bank);
         data.setFund(fund);
         data.setIsStaff(isStaff);
 
