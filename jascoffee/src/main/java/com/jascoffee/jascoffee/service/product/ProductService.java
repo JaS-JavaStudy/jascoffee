@@ -12,6 +12,16 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// 이미지 관련 임포트
+import org.springframework.web.multipart.MultipartFile;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.UUID;
+import java.nio.file.StandardCopyOption;
+
 @Service
 @RequiredArgsConstructor // final이나 @NonNull이 붙은 필드에 대한 생성자를 자동으로 생성
 @Transactional
@@ -40,12 +50,19 @@ public class ProductService {
          ]
      }
     **/
-    public ProductDetailDTO createProduct(ProductCreateDTO productCreateDTO) {
+    public ProductDetailDTO createProduct(ProductCreateDTO productCreateDTO, MultipartFile image) throws IOException {
+        // 이미지 처리
+        String imageUrl = null;
+        if (image != null && !image.isEmpty()) {
+            imageUrl = saveImage(image);
+        }
+
         // 1. 상품 엔티티 생성
         Product product = Product.builder()
                 .productName(productCreateDTO.getProductName())
                 .price(productCreateDTO.getPrice())
                 .category(productCreateDTO.getCategory())
+                .imageUrl(imageUrl)
                 .build();
 
         // 2. 옵션 엔티티 생성 및 연관관계 설정
@@ -62,6 +79,20 @@ public class ProductService {
         // 3. 저장 및 반환
         Product savedProduct = productRepository.save(product);
         return convertToDetailDTO(savedProduct);
+    }
+
+    private String saveImage(MultipartFile file) throws IOException {
+        String uploadDir = "uploads/images";
+        File directory = new File(uploadDir);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
+        String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+        Path filePath = Paths.get(uploadDir).resolve(fileName);
+        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+        return "/images/" + fileName;
     }
 
 
@@ -91,6 +122,7 @@ public class ProductService {
                 .productName(product.getProductName())
                 .price(product.getPrice())
                 .category(product.getCategory())
+                .imageUrl(product.getImageUrl())
                 .build();
     }
 
@@ -107,6 +139,7 @@ public class ProductService {
                 .productName(product.getProductName())
                 .price(product.getPrice())
                 .category(product.getCategory())
+                .imageUrl(product.getImageUrl())
                 .options(options)
                 .build();
     }
@@ -122,20 +155,26 @@ public class ProductService {
     }
 
     // 상품 수정
-    public ProductDetailDTO updateProduct(Long productId, ProductUpdateDTO productUpdateDTO) {
+    public ProductDetailDTO updateProduct(Long productId, ProductUpdateDTO productUpdateDTO, MultipartFile image) throws IOException {
         // 1. 상품 조회
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new EntityNotFoundException("상품을 찾을 수 없습니다."));
 
-        // 2. 상품 정보 업데이트
+        // 2. 이미지 처리
+        if (image != null && !image.isEmpty()) {
+            String imageUrl = saveImage(image);
+            product.setImageUrl(imageUrl);
+        }
+
+        // 3. 상품 정보 업데이트
         product.setProductName(productUpdateDTO.getProductName());
         product.setPrice(productUpdateDTO.getPrice());
         product.setCategory(productUpdateDTO.getCategory());
 
-        // 3. 옵션 업데이트
+        // 4. 옵션 업데이트
         updateProductOptions(product, productUpdateDTO.getOptions());
 
-        // 4. 저장 및 반환
+        // 5. 저장 및 반환
         Product updatedProduct = productRepository.save(product);
         return convertToDetailDTO(updatedProduct);
     }

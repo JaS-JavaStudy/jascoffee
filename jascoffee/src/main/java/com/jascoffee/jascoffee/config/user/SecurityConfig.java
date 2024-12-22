@@ -21,6 +21,7 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 
@@ -62,8 +63,12 @@ public class SecurityConfig{
 
         http
                 .authorizeHttpRequests((auth)-> auth
-                        .requestMatchers("/**").permitAll()  // 이 경로들은 모두 접근 가능
-                        .requestMatchers("/admin").hasRole("ADMIN")  // admin 경로는 ADMIN 역할을 가진 사용자만
+                        // 메인페이지, 회원가입, 로그인, 토큰 재발급은 비로그인시 허용
+                        .requestMatchers("/login","/","/join").permitAll()
+                        .requestMatchers("/reissue").permitAll()
+                        .requestMatchers("/admin").hasRole("ADMIN")
+                        // 다른 요청은 허가받아야함(access 토큰 필요)
+
                         .anyRequest().authenticated());
 
         http
@@ -96,17 +101,12 @@ public class SecurityConfig{
                         configuration.setAllowCredentials(true);
                         configuration.setAllowedHeaders(Collections.singletonList("*"));
                         configuration.setMaxAge(3600L);
-
-                        configuration.setExposedHeaders(Collections.singletonList("Authorization"));
-
+                        // CORS 에서 응답할 때 세가지를 모두 응답해준다.
+                        configuration.setExposedHeaders(Arrays.asList("Authorization", "access", "refresh"));
                         return configuration;
                     }
                 })));
 
         return http.build();
     }
-    //수정전 re/eyJhbGciOiJIUzI1NiJ9.eyJjYXRlZ29yeSI6InJlZnJlc2giLCJhY2NvdW50IjoidGVzdCIsImlzU3RhZmYiOmZhbHNlLCJpYXQiOjE3MzQzMzMxNTcsImV4cCI6MTczNDQxOTE1N30.9WW2090kSv8HGHSY_7QjHq25lsy7gvyqW0_o-mGaXqA
-    //수정 전 ac/eyJhbGciOiJIUzI1NiJ9.eyJjYXRlZ29yeSI6ImFjY2VzcyIsImFjY291bnQiOiJ0ZXN0IiwiaXNTdGFmZiI6ZmFsc2UsImlhdCI6MTczNDMzMzE1NywiZXhwIjoxNzM0MzM5MTU3fQ.LWTKy9G0OTAiahQX5_Gd2Fi6iv4t-_2bxBp27GvqXR4
-
-    //수정후 re/eyJhbGciOiJIUzI1NiJ9.eyJjYXRlZ29yeSI6InJlZnJlc2giLCJhY2NvdW50IjoidGVzdCIsImlzU3RhZmYiOmZhbHNlLCJpYXQiOjE3MzQzMzMxNTcsImV4cCI6MTczNDQxOTE1N30.9WW2090kSv8HGHSY_7QjHq25lsy7gvyqW0_o-mGaXqA
 }
