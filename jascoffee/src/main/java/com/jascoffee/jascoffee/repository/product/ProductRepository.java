@@ -12,4 +12,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     // SELETC * FROM product WHERE category = ? 와 같음
     List<Product> findByCategory(String category);
 
+
 }

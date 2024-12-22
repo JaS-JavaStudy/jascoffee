@@ -85,7 +85,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String isStaff = String.valueOf(customUserDetails.getIsStaff());
 
         //토큰 생성
-        String access = jwtUtil.createJwt("access",username,isStaff,6000000L);
+        String access = jwtUtil.createJwt("access",username,isStaff,600000L);
         String refresh = jwtUtil.createJwt("refresh",username,isStaff,86000000L);
 
         //Refresh 토큰 저장
