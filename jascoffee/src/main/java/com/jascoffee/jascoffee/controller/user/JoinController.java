@@ -49,10 +49,9 @@ public class JoinController {
 
     // 회원 관리자 여부 조회
     @GetMapping("/staff")
-    public boolean getStaffByAccount(@RequestHeader String access) {
+    public String getStaffByAccount(@RequestHeader String access) {
         // account를 통해 DB에서 회원 정보 조회
-        boolean isStaff = Boolean.getBoolean(jwtUtil.getIsStaff(access));
-
+        String isStaff = jwtUtil.getIsStaff(access);
         return isStaff;
     }
 
