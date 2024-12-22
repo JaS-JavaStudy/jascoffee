@@ -49,4 +49,11 @@ public class OrderListController {
         OrderListResponse response = orderListService.getOrder(orderID);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    // jwt에서 account를 이용해서 userid를 가져오게 하는 코드
+//    @GetMapping("/my")
+//    public ResponseEntity<List<OrderListResponse>> getMyOrders(@RequestHeader ("access") String token) {
+//
+//        String account ;
+//    }
 }
