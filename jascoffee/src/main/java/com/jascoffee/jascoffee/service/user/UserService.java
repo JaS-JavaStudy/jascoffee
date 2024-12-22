@@ -64,6 +64,10 @@ public class UserService {
             user.setMmid(request.getMmid());
         }
 
+        if(request.getBank() != null) {
+            user.setBank(request.getBank());
+        }
+
         if(request.getFund() != null) {
             user.setFund(request.getFund());
         }
