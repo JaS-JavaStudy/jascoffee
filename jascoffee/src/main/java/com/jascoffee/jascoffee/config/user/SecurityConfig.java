@@ -68,7 +68,13 @@ public class SecurityConfig{
                         .requestMatchers("/reissue").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         // 다른 요청은 허가받아야함(access 토큰 필요)
+
                         .anyRequest().authenticated());
+
+        http
+                .sessionManagement((session) -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
         http
                 .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
 
@@ -79,9 +85,7 @@ public class SecurityConfig{
         http
                 .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository), LogoutFilter.class);
 
-        http
-                .sessionManagement((session) -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
 
         // CORS 부분
         http

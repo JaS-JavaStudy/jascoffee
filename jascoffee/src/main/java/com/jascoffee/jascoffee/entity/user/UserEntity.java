@@ -31,5 +31,5 @@ public class UserEntity {
     private String fund;
 
     @Column(name = "isStaff")
-    private Boolean isStaff;
+    private Boolean isStaff = false;
 }
