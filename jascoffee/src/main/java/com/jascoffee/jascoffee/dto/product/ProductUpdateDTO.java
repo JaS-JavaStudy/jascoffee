@@ -12,4 +12,5 @@ public class ProductUpdateDTO {
     private int price;
     private String category;
     private List<ProductOptionCreateDTO> options;
+    private String imageUrl;
 }

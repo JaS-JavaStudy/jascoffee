@@ -29,6 +29,9 @@ public class Product {
     @Column(name = "Category")
     private String category;
 
+    @Column(name = "imageUrl")
+    private String imageUrl;
+
     // ProductOption과의 양방향 관계 설정
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default  // Builder 패턴 사용시 options 필드 초기화
