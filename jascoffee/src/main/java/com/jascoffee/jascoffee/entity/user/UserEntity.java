@@ -27,6 +27,9 @@ public class UserEntity {
     @Column(name = "MMID")
     private String mmid;
 
+    @Column(name = "bank")
+    private String bank;
+
     @Column(name = "fund")
     private String fund;
 
