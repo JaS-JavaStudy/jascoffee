@@ -69,6 +69,20 @@ public class OrderListController {
         return ResponseEntity.ok(orderList);
     }
 
+    // 주문위해 userId 가져오기
+    @GetMapping("/getUserId")
+    public Long getUserId(@RequestHeader("access") String token) {
+        // 1. JWT에서 account 추출
+        String account = jwtTokenProvider.getAccountFromToken(token);
+
+        // 2. UserService를 통해 account로 UserEntity 조회
+        UserEntity user = userService.findByAccount(account);
+
+        // 5. 결과 반환
+        return user.getUserID();
+    }
+
+
     // jwt에서 account를 이용해서 userid를 가져오게 하는 코드
 //    @GetMapping("/my")
 //    public ResponseEntity<List<OrderListResponse>> getMyOrders(@RequestHeader ("access") String token) {
