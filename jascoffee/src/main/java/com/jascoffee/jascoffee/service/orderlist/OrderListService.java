@@ -4,7 +4,11 @@ import com.jascoffee.jascoffee.dto.orderlist.request.OrderListCreateRequest;
 import com.jascoffee.jascoffee.dto.orderlist.request.OrderListUpdateRequest;
 import com.jascoffee.jascoffee.dto.orderlist.response.OrderListResponse;
 import com.jascoffee.jascoffee.entity.orderlist.OrderListEntity;
+import com.jascoffee.jascoffee.entity.user.UserEntity;
+import com.jascoffee.jascoffee.repository.orderlist.OrderDetailRepository;
 import com.jascoffee.jascoffee.repository.orderlist.OrderListRepository;
+import com.jascoffee.jascoffee.repository.user.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +22,8 @@ import java.util.stream.Collectors;
 public class OrderListService {
 
     private final OrderListRepository orderListRepository;
+    private final OrderDetailRepository orderDetailRepository;
+    private final UserRepository userRepository;
 
     // 주문 생성
     public OrderListResponse createOrder(OrderListCreateRequest request) {
@@ -62,6 +68,17 @@ public class OrderListService {
                 .build();
     }   // 변경 사항 업데이트
 
+    // 주문 삭제
+    @Transactional
+    public void deleteOrder(long orderID) {
+        // OrderDetail 삭제
+        orderDetailRepository.deleteByOrderlist_OrderID(orderID);
+
+        // Order 삭제
+        orderListRepository.deleteByOrderID(orderID);
+    }
+
+
     // 특정 주문 조회
     public OrderListResponse getOrder(Long orderID) {
         OrderListEntity orderEntity = orderListRepository.findById(orderID)
@@ -79,16 +96,27 @@ public class OrderListService {
     // 모든 주문 목록 조회
     public List<OrderListResponse> getAllOrders() {
         List<OrderListEntity> orderEntities = orderListRepository.findAll();
+
         return orderEntities.stream()
-                .map(order -> OrderListResponse.builder()
-                        .orderID(order.getOrderID())
-                        .userID(order.getUserID())
-                        .totalPrice(order.getTotalPrice())
-                        .isCancel(order.getIsCancel())
-                        .orderedAt(order.getOrderedAt())
-                        .build())
+                .map(order -> {
+                    // userID로 사용자 정보 조회
+                    UserEntity userEntity = userRepository.findById(order.getUserID())
+                            .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다. ID: " + order.getUserID()));
+
+                    // OrderListResponse 생성
+                    return OrderListResponse.builder()
+                            .orderID(order.getOrderID())
+                            .userID(order.getUserID())
+                            .name(userEntity.getName()) // 사용자 이름 설정
+                            .mmid(userEntity.getMmid())    // 사용자 mmid 설정
+                            .totalPrice(order.getTotalPrice())
+                            .isCancel(order.getIsCancel())
+                            .orderedAt(order.getOrderedAt())
+                            .build();
+                })
                 .collect(Collectors.toList());
     }
+
 
     // 특정 사용자의 모든 주문 조회
     public List<OrderListResponse> getOrdersByUserId(Long userId) {
