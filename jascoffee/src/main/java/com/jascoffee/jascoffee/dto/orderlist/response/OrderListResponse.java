@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 @Builder
 public class OrderListResponse {
     private Long orderID;
+    private String name;
+    private String mmid;
     private Long userID;
     private Integer totalPrice;
     private Boolean isCancel;

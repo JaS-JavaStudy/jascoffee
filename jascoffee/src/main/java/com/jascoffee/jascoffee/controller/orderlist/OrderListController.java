@@ -10,6 +10,7 @@ import com.jascoffee.jascoffee.repository.user.UserRepository;
 import com.jascoffee.jascoffee.service.orderlist.OrderListService;
 import com.jascoffee.jascoffee.service.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,6 +41,14 @@ public class OrderListController {
 
         OrderListResponse response = orderListService.updateOrder(request);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // 주문 삭제
+    @DeleteMapping("/{orderID}")
+    public ResponseEntity<String> deleteOrder(@PathVariable Long orderID) {
+        orderListService.deleteOrder(orderID);
+
+        return ResponseEntity.ok("주문이 성공적으로 삭제되었습니다.");
     }
 
     // 전체 주문 목록 조회

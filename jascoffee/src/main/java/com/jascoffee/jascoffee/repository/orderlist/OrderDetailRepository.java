@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface OrderDetailRepository extends JpaRepository<OrderDetailEntity, Long> {
     List<OrderDetailEntity> findByOrderDetailID(Long orderDetailID);
+    int deleteByOrderlist_OrderID(Long orderID);
 }

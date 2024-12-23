@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 public class OrderDetailController {
-    private OrderDetailService orderDetailService;
+    private final OrderDetailService orderDetailService;
 
     public OrderDetailController(OrderDetailService orderDetailService){
         this.orderDetailService = orderDetailService;

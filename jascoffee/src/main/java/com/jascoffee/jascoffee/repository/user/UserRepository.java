@@ -17,5 +17,4 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     boolean existsByMmid(String mmid);
 
     void deleteByAccount(String account);
-
 }
