@@ -70,6 +70,6 @@ public class JoinService {
         UserEntity user = userRepository.findByAccount(account)
                 .orElseThrow(() -> new RuntimeException("없는 회원 입니다."));
 
-        return new UserDTO(user.getAccount(),user.getName(),user.getMmid(),user.getFund());
+        return new UserDTO(user.getAccount(),user.getName(),user.getMmid(),user.getBank(),user.getFund());
     }
 }

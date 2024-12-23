@@ -64,6 +64,10 @@ public class UserService {
             user.setMmid(request.getMmid());
         }
 
+        if(request.getBank() != null) {
+            user.setBank(request.getBank());
+        }
+
         if(request.getFund() != null) {
             user.setFund(request.getFund());
         }
@@ -104,6 +108,11 @@ public class UserService {
 
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
+    }
+
+    public UserEntity findByAccount(String account) {
+        return userRepository.findByAccount(account)
+                .orElseThrow(() -> new UsernameNotFoundException("Account를 가진 사용자를 찾을 수 없습니다: " + account));
     }
 
 
