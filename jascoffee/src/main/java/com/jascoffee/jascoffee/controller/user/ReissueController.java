@@ -73,11 +73,12 @@ public class ReissueController {
 
 
         String account = jwtUtil.getAccount(refresh);
-        String isStaff = jwtUtil.getIsStaff(refresh);
+        String isStaff = String.valueOf(jwtUtil.getIsStaff(refresh));
 
         //make new JWT
-        String newAccess = jwtUtil.createJwt("access", account, isStaff, 600000L);
-        String newRefresh = jwtUtil.createJwt("refresh", account, isStaff, 86400000L);
+        Boolean isStaffBoolean = Boolean.parseBoolean(isStaff); // 만약 isStaff가 String이라면 변환
+        String newAccess = jwtUtil.createJwt("access", account, isStaffBoolean, 600000L);
+        String newRefresh = jwtUtil.createJwt("refresh", account, isStaffBoolean, 86400000L);
 
         //Refresh 토큰 저장 DB에 기존의 Refresh 토큰 삭제 후 새 Refresh 토큰 저장
         refreshRepository.deleteByRefresh(refresh);
