@@ -27,13 +27,13 @@ public class JWTUtil {
                 .get("account", String.class);
     }
 
-    public String getIsStaff(String token) {
+    public Boolean getIsStaff(String token) {
         return Jwts.parser()
-                .verifyWith(secretKey)
+                .setSigningKey(secretKey)
                 .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .get("isStaff", String.class);
+                .parseClaimsJws(token)
+                .getBody()
+                .get("isStaff", Boolean.class); // Boolean으로 읽기
     }
 
 
@@ -60,13 +60,13 @@ public class JWTUtil {
     }
 
     // JWT 생성 메서드
-    public String createJwt(String category, String account, String isStaff,Long expiredMs) {
+    public String createJwt(String category, String account, Boolean isStaff, Long expiredMs) {
         return Jwts.builder()
                 .claim("category", category)
                 .claim("account", account) // account로 필드명 변경
-                .claim("isStaff", isStaff)
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + expiredMs))
+                .claim("isStaff", isStaff) // Boolean으로 저장
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + expiredMs))
                 .signWith(secretKey)
                 .compact();
     }

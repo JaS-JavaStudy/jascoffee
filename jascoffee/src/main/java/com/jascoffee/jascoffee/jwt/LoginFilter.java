@@ -85,14 +85,16 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String isStaff = String.valueOf(customUserDetails.getIsStaff());
 
         //토큰 생성
-        String access = jwtUtil.createJwt("access",username,isStaff,600000L);
-        String refresh = jwtUtil.createJwt("refresh",username,isStaff,86000000L);
+        Boolean isStaffBoolean = Boolean.parseBoolean(isStaff); // 만약 isStaff가 String이라면 변환
+        String newAccess = jwtUtil.createJwt("access", username, isStaffBoolean, 600000L);
+        String newRefresh = jwtUtil.createJwt("refresh", username, isStaffBoolean, 86400000L);
+
 
         //Refresh 토큰 저장
-        addRefreshEntity(username, refresh, 86400000L);
+        addRefreshEntity(username, newRefresh, 86400000L);
 
-        response.setHeader("access",access);
-        response.addCookie(createCookie("refresh",refresh));
+        response.setHeader("access",newAccess);
+        response.addCookie(createCookie("refresh",newRefresh));
         response.setStatus(HttpStatus.OK.value());
 
     }

@@ -9,11 +9,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collections;
 
 public class JWTFilter extends OncePerRequestFilter {
 
@@ -65,21 +67,28 @@ public class JWTFilter extends OncePerRequestFilter {
         }
 
         // username, role 값을 획득
+
         String account = jwtUtil.getAccount(accessToken);
-        String isStaff = jwtUtil.getIsStaff(accessToken);
+        boolean isStaff = jwtUtil.getIsStaff(accessToken);
 
 
-        boolean tmp = Boolean.parseBoolean(isStaff);
-
+        String role = isStaff ? "ROLE_ADMIN" : "ROLE_USER";
         UserEntity userEntity = new UserEntity();
         userEntity.setAccount(account);
-        userEntity.setIsStaff(tmp);
+        userEntity.setIsStaff(isStaff);
+
         CustomUserDetails customUserDetails = new CustomUserDetails(userEntity);
 
-        Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
+        Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, Collections.singletonList(new SimpleGrantedAuthority(role)));
         SecurityContextHolder.getContext().setAuthentication(authToken);
 
         filterChain.doFilter(request, response);
 
+    }
+    private void sendErrorResponse(HttpServletResponse response, int status, String message) throws IOException {
+        response.setContentType("application/json");
+        response.setStatus(status);
+        PrintWriter writer = response.getWriter();
+        writer.write("{\"error\": \"" + message + "\"}");
     }
 }

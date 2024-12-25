@@ -2,6 +2,7 @@ package com.jascoffee.jascoffee.dto.user;
 
 import com.jascoffee.jascoffee.entity.user.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -17,8 +18,11 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // 권한이 필요 없다면 빈 리스트를 반환
-        return Collections.emptyList();
+        // userEntity에서 isStaff 값을 가져와 권한 설정
+        if (userEntity.getIsStaff() != null && userEntity.getIsStaff()) {
+            return Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     // isStaff와 account 등 받기 위해
@@ -55,4 +59,5 @@ public class CustomUserDetails implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }

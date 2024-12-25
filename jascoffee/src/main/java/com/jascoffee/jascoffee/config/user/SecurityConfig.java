@@ -64,7 +64,7 @@ public class SecurityConfig{
         http
                 .authorizeHttpRequests((auth)-> auth
                         // 메인페이지, 회원가입, 로그인, 토큰 재발급은 비로그인시 허용
-                        .requestMatchers("/login","/","/join", "/join/account", "/join/mmid").permitAll()
+                        .requestMatchers("/login","/","/join", "/join/account", "/join/mmid","/users/all").permitAll()
                         .requestMatchers("/reissue").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         // 다른 요청은 허가받아야함(access 토큰 필요)
