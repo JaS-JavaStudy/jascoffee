@@ -106,6 +106,15 @@ public class UserService {
             throw new IllegalArgumentException("기존 비밀번호가 일치하지 않습니다.");
         }
 
+        if(!request.getNewPassword().equals(request.getConfirmPassword())) {
+            System.out.println(request.getNewPassword() + " " + request.getConfirmPassword());
+            throw new IllegalArgumentException("새 비밀번호와 확인용 비밀번호가 일치하지 않습니다.");
+        }
+
+        if(request.getNewPassword().length() <8){
+            throw new IllegalArgumentException("8자리 이상의 비밀번호를 설정해주세요.");
+        }
+
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
     }
